@@ -1,6 +1,6 @@
 # Visualizing World Happiness
 ### CS171 Project by Andrey Esipov, Gabin Ryu, Anna Zinoveva  
-This repository contains the code for our project website.    
+This repository contains the code for our project website.      
 ​
 **Project website**: https://andrey-esipov.github.io/visualizing_world_happiness/  
 ​
@@ -22,8 +22,9 @@ D3 libraries used:
 * [d3-geo](https://github.com/d3/d3-geo): for maps
 * [TopoJSON](https://github.com/topojson/topojson): for maps
 * [d3-legend](https://d3-legend.susielu.com/): for shapes in legends
-* [d3-cloud](https://github.com/jasondavies/d3-cloud): for the word cloud  
-​  
+* [d3-cloud](https://github.com/jasondavies/d3-cloud): for the word cloud
+​
+
 We have referenced the following codepen publication for the popup in the beginning of the site: [https://codepen.io/pedrobenoit91/pen/aJGzYg](https://codepen.io/pedrobenoit91/pen/aJGzYg)  
 ​  
 The initial words used in the word cloud is from: [http://en.wikiquote.org/wiki/Opening_lines](http://en.wikiquote.org/wiki/Opening_lines)  
