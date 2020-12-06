@@ -1,14 +1,14 @@
 # Visualizing World Happiness
 ### CS171 Project by Andrey Esipov, Gabin Ryu, Anna Zinoveva  
-This repository contains the code for our project website.  
+This repository contains the code for our project website.    
 ​
 **Project website**: https://andrey-esipov.github.io/visualizing_world_happiness/  
 ​
 **Screencast video**: [URL HERE](URL HERE)  
-​
+​  
 We have used the following libraries in our code...  
-​
-JS libraries used:  
+​  
+JS libraries used:   
 ​
 * [jQuery](https://jquery.com/)
 * [Bootstrap](https://getbootstrap.com/)
@@ -16,7 +16,7 @@ JS libraries used:
 * [fullPAge.js](https://alvarotrigo.com/fullPage/): for fullscreen scrolling page layout
 ​
   
-D3 libraries used:      
+D3 libraries used:  
 ​
 * [d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic): for color scale
 * [d3-geo](https://github.com/d3/d3-geo): for maps
