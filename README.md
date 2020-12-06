@@ -5,7 +5,8 @@ Project website: https://andrey-esipov.github.io/visualizing_world_happiness/
 ​
 Screencast video: [URL HERE](URL HERE)  
 ​
-The folder contains the code for our project website. We have used the following libraries in our code...  
+This repository contains the code for our project website.   
+We have used the following libraries in our code...  
 ​
 Additional JS libraries:  
 ​
