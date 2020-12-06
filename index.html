@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Visualizing World Happiness</title>
+    
+        <link href="https://fonts.googleapis.com/css?family=Neuton:300,400,400i,700,800" rel="stylesheet">
+    
+        <!-- CSS libraries -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.6.6/jquery.fullPage.css">
+        <link rel="canonical" href="https://webdevtrick.com/javascript-full-page-scrolling/"/>
+        <link rel="stylesheet" type="text/css" href="css/d3.slider.css" media="screen" />
+        <link href='https://fonts.googleapis.com/css?family=Lato:400,300,400italic,700' rel='stylesheet' type='text/css'>
+        <!-- Custom CSS code -->
+        <link rel="stylesheet" href="css/style.css">
+        <!-- jQuety popup-->
+
+        <!--https://codepen.io/pedrobenoit91/pen/aJGzYg-->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.8.2.js"></script>
+        <style type="text/css">
+            #overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 47, 77, 0.3);
+                filter:alpha(opacity=70);
+                -moz-opacity:0.7;
+                -khtml-opacity: 0.7;
+                opacity: 0.7;
+                z-index: 100;
+
+            }
+            .cnt223 a{
+                text-decoration: none;
+            }
+            .popup{
+                width: 100%;
+                margin: 0 auto;
+                display: none;
+                position: fixed;
+                z-index: 101;
+
+            }
+            .cnt223{
+                min-width: 600px;
+                width: 600px;
+                min-height: 150px;
+                margin: 25vh auto;
+                background: #f3f3f3;
+                position: relative;
+                z-index: 103;
+                padding: 30px 50px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px #000;
+            }
+            .cnt223 p{
+                clear: both;
+                color: #555555;
+                /* text-align: justify; */
+                font-size: 20px;
+                font-family: sans-serif;
+            }
+            .cnt223 p a{
+                color: #d91900;
+                font-weight: bold;
+            }
+            .cnt223 .x{
+                float: right;
+                height: 35px;
+                left: 22px;
+                position: relative;
+                top: -25px;
+                width: 34px;
+            }
+            .cnt223 .x:hover{
+                cursor: pointer;
+            }
+            .close {display: none;}
+        </style>
+       <script type='text/javascript'>
+            $(function(){
+                var overlay = $('<div id="overlay"></div>');
+                overlay.show();
+                overlay.appendTo(document.body);
+                $('.popup').show();
+                $('.close').click(function(){
+                    $('.popup').hide();
+                    overlay.appendTo(document.body).remove();
+                    window.location.href = "index.html#secondSection";
+                    return false;
+                });
+
+                $('.x').click(function(){
+                    $('.popup').hide();
+                    overlay.appendTo(document.body).remove();
+                    return false;
+                });
+
+                $("area").click(function(){
+                    $(this).blur(); // https://stackoverflow.com/questions/4351827/how-do-i-get-rid-of-this-border-outline-for-my-image-map-areas-when-clicked-os
+                    $('.popupSmileys').remove();
+                    $('.popupHeading').remove();
+                })
+
+                $('.unhappy').click(function(){
+                    var feedback1 = $('<br><br><p style="font-family: Segoe UI; text-align: center">Sorry to hear that... You are not alone.<br>\n' +
+                        'We hope you will find more ways to be happier as you explore this page.</p>');
+                    feedback1.appendTo( $( ".cnt223" ) );
+                    $('.close').show();
+                    return false;
+                });
+
+                $('.happy').click(function(){
+                    var feedback2 = $('<br><br><p style="font-family: Segoe UI; text-align: center">That\'s great to know!  Happiness is contagious.<br>\n' +
+                        'We hope you will find even more ways to be happier as you explore this page.</p>');
+                    feedback2.appendTo( $( ".cnt223" ) );
+                    $('.close').show();
+                    return false;
+                });
+
+            });
+        </script>
+    </head>
+<body>
+
+<div class='popup' style="align-items: center;">
+    <div class='cnt223' style="height: 250px; opacity: 1; align-content: center;">
+        <p><a href='' class='close' style="opacity: 1">Close</a></p>
+        <h3 class="popupHeading" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">How Happy Are You?</h3>
+        <p class="popupSmileys">
+	            <a href='' style="opacity: 1; "><img src="img/how-happy-are-you.png" alt="five smileys" width="500" usemap="#Map1" ></a>
+        </p>
+        <map name="Map1">
+          <area shape="rect" coords="0,0,305,350" alt="unhappy" class="unhappy" style="cursor: pointer">
+          <area shape="rect" coords="303,-2,502,117" alt="happy" class="happy" style="cursor: pointer">
+        </map>
+    </div>
+</div>
+
+<header>
+  <div class="header-top clearfix">
+      <a href="#firstSection"><img src="img/visualizing-happiness-logo2.png" height="78px" style="padding: 4px 0 0 20px" class="l-left"/></a>
+      <h1 class="l-left"><a href="#firstSection" style="color: white; text-decoration:none; font-family: Segoe UI;">What Can We Learn from the Happiest Countries in the World?</a></h1>
+      <a class="l-right toggle-menu" href="#">
+      <i></i>
+      <i></i>
+      <i></i>
+      </a>
+  </div>
+
+  <nav class="hide">
+    <ul id="menu1">
+      <li data-menuanchor="firstSection">
+        <a href="#firstSection" title="First Section" style="color: white; text-decoration:none">Introduction</a>
+      </li>
+      <li data-menuanchor="secondSection">
+        <a href="#secondSection" title="Second Section" style="color: white; text-decoration:none">What is Happiness?</a>
+      </li>
+      <li data-menuanchor="thirdSection">
+        <a href="#thirdSection" title="Third Section" style="color: white; text-decoration:none">Measuring Happiness</a>
+      </li>
+      <li data-menuanchor="fourthSection">
+        <a href="#fourthSection" title="Fourth Section" style="color: white; text-decoration:none">Happiness Map</a>
+      </li>
+      <li data-menuanchor="fifthSection">
+        <a href="#fifthSection" title="Fifth Section" style="color: white; text-decoration:none">Happiness Rank</a>
+      </li>
+    </ul>
+    <ul id="menu2">
+        <li data-menuanchor="sixthSection">
+        <a href="#sixthSection" title="Sixth Section" style="color: white; text-decoration:none">Happiness Factors</a>
+        </li>
+      <li data-menuanchor="seventhSection">
+        <a href="#seventhSection" title="Seventh Section" style="color: white; text-decoration:none">Correlation with Happiness</a>
+      </li>
+      <li data-menuanchor="eightthSection">
+        <a href="#eightthSection" title="Eightth Section" style="color: white; text-decoration:none">High vs Low Ranked</a>
+      </li>
+      <li data-menuanchor="ninthSection">
+        <a href="#ninthSection" title="Ninth Section" style="color: white; text-decoration:none">Commonality between the Happiest</a>
+      </li>
+      <li data-menuanchor="tenthSection">
+        <a href="#tenthSection" title="Tenth Section" style="color: white; text-decoration:none">Happiness Trend</a>
+      </li>
+      <li data-menuanchor="eleventhSection">
+        <a href="#eleventhSection" title="Eleventh Section" style="color: white; text-decoration:none">Conclusion</a>
+      </li>
+      <li data-menuanchor="twelvethSection">
+        <a href="#twelvethSection" title="Twelveth Section" style="color: white; text-decoration:none">Quote</a>
+      </li>
+      <li data-menuanchor="thirteenthSection">
+        <a href="#thirteenthSection" title="Thirteenth Section" style="color: white; text-decoration:none">Tell us what you think!</a>
+      </li>
+      <li data-menuanchor="fourteenthSection">
+        <a href="#fourteenthSection" title="Fourteenth Section" style="color: white; text-decoration:none">References</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<div id="fullpage">
+
+    <!--SECTION #1: WHAT MAKES US HAPPY-->
+    <section class="vertical-scrolling" style="background-image: linear-gradient(165deg,rgba(255,174,0,.2) 25%,rgba(0,105,144,.2) 95%);">
+       
+    </section>
+
+    <!--SECTION #1.1: WHAT MAKES US HAPPY-->
+    <section class="vertical-scrolling" style="background-image: linear-gradient(165deg,rgba(255,174,0,.2) 25%,rgba(0,105,144,.2) 95%);">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2>
+                        What Makes Us Happy?
+                    </h2>
+                    <img id=smileyswap src='img/what-makes-us-happy1.png' onclick=smileyswap.src='img/what-makes-us-happy2.png'  onmouseout=smileyswap.src='img/what-makes-us-happy1.png' alt="smiley">
+                    <p style="margin: 10px 20px;">"Happiness" means different things to different people, but we all seem to be chasing it. While 50% of our happiness may be outside of our control, the other 50% is up to us. Our environment significantly affects the life we live. People from certain countries appear to be more successful in their pursuits of happiness.
+                        <br><br><b>As we explore what makes these countries happier, think about what "happiness" means for you.</b>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!--SECTION #2: MEASURING HAPPINESS SECTION-->
+  <section class="vertical-scrolling" style="background-image: linear-gradient(165deg,rgba(255,174,0,.2) 25%,rgba(0,105,144,.2) 95%);">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>How is Happiness Measured?</h2>
+                <br>
+                <p>The most recognized measure of happiness is from the World Happiness Report, a landmark survey of global happiness that ranks 156 countries by how happy their citizens perceive themselves to be. It is published annually on International Day of Happiness, March 20.
+                </p>
+                <p>The respondents assess their lives on a scale of 0-10 (10 being the "best possible life"). The following 6 factors influence each country's overall happiness score –  <b>economic production (GPD per capita), social support (family), life expectancy (health), freedom (freedom to make life choices), absence of government corruption, and generosity (giving to others).</b>
+               </p>
+                <p>Please click one of the images below to familiarize yourself with the World Happiness Reports from recent years.</p>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col">
+                <a href="https://worldhappiness.report/ed/2020" target="_blank">
+                    <img src="img/WHR2020.PNG" height="200px">
+                </a>
+                <a href="https://worldhappiness.report/ed/2019" target="_blank">
+                    <img src="img/WHR2019.PNG" height="200px">
+                </a>
+                <a href="https://worldhappiness.report/ed/2018" target="_blank">
+                    <img src="img/WHR2018.PNG" height="200px">
+                </a>
+                <a href="https://worldhappiness.report/ed/2017" target="_blank">
+                    <img src="img/WHR2017.PNG" height="200px">
+                </a>
+                <a href="https://worldhappiness.report/ed/2016" target="_blank">
+                    <img src="img/WHR2016.PNG" height="200px">
+                </a>
+                <a href="https://worldhappiness.report/ed/2015" target="_blank">
+                    <img src="img/WHR2015.PNG" height="200px">     
+                </a>  
+                <br> 
+                <br>
+                <br>
+                <p>This page aims to examine why certain countries rank the highest in overall happiness. Can any patterns be noticed among the happiest countries in the world? How did happiness ranks or scores change between 2015 and 2020? Did any country experience a significant increase or decrease in happiness?</p>
+            </div>     
+        </div>
+    </div>
+</section>
+
+
+   <!--SECTION #3: DYNAMIC MAP SECTION-->
+  <section class="vertical-scrolling" style="background-image: linear-gradient(165deg,rgba(255,174,0,.2) 25%,rgba(0,105,144,.2) 95%);">
+    <div class="container">
+        <div class="row">
+            <div class="col" style="align-content: center;" >
+                <br>
+                <br>
+                <br>
+                <br>
+                <h2>Happiness Rankings by Country 2015-2020</h2>
+                <p>Notice that the aggregate yearly happiness score varies from year to year. In other words, happiness across all countries fluctuates over time. To visualize this fluctuation over time, click on corresponding <strong>bubbles of the years</strong>, and the <strong>map</strong> will update to show you which countries scored the highest in terms of happiness for that year. To learn more about each country's standing for that year, hover over the country on the map.
+                <br><br> <strong>Were you surprised by these results?</strong> </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div id="trendDiv"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div id="mapDiv"></div>
+            </div>
+        </div>
+  </section>
+
+ <!--SECTION #4: STACKED BAR CHART MAP SECTION-->
+  <section class="vertical-scrolling" style="background-image: linear-gradient(165deg,rgba(255,174,0,.2) 25%,rgba(0,105,144,.2) 95%);">
+      <div class="container" style="width: 100%">
+        <div class="row">
+            <div class="col-12">
+                <div style="height: 100%">
+                    <h1>Happiness Rankings by Country</h1>	
+                    <p>Explore which countries ranked at highest and lowest on the Happiness Rankings. In addition to the six factors (Absence of Government Corruption, Economy, Freedom, Generosity, Life Expectancy, and Social Support), the Happiness Rankings considers <b>Dystopia Residual</b>,
+                       which indicates how each of the countries compares to a hypothetical country with scores equal to the world's lowest national averages for each of the six factors.<br><br> <strong>Explore the visualization and see if certain countries consistently rank towards the top or the bottom of the rankings.</strong>
+                    </p><br>
+                    <label style="text-transform: uppercase">Select Year </label>
+                    <select id='yearSelectorBar' class="custom-select align-self-center" style="width: 20%" onchange="yearChangeBar()">
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020" selected>2020</option>
+                    </select>
+                    &nbsp;&nbsp;
+                    <label style="text-transform: uppercase">Sort by </label>
+                    <select id='orderSelectorBar' class="custom-select align-self-center" style="width: 20%" onchange="orderChangeBar()">
+                        <option value="low">Lowest</option>
+                        <option value="high" selected>Highest</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12">   
+                <div id="stackedBarDiv"></div>
+                <div id="stackTooltip"></div>
+            </div>	
+        </div>
+    </div>
+  </section>
+
+  <!--SECTION #5 - RADIAL MAP SECTION-->
+  <section class="vertical-scrolling" style="background-image: linear-gradient(165deg,rgba(255,174,0,.2) 25%,rgba(0,105,144,.2) 95%);">
+    <div class="container" style="width: 100%">
+        <div class="row">
+            <div class="col-4">
+                    <br>
+                    <h2>Happiness Scores Across Every Country</h2>	
+                    <p>Interested in learning more about each country's Happiness Score? Explore this visualization to understand better how each of the six happiness factors contributed to each country's overall Happiness Score. The country names are sorted alphabetically.
+                    </p>
+                    <p><strong>What is the Happiness Score for your country?</strong></p>
+            </div>
+            <div class="col-8" style="align-items: center;">
+                <div id="radialMapDiv"></div>
+            </div>
+        </div> 
+    </div>
+  </section>
+
+   <!--SECTION #6 HAPPINESS TREND-->
+   <section class="vertical-scrolling" style="background-image: linear-gradient(165deg,rgba(255,174,0,.2) 25%,rgba(0,105,144,.2) 95%);">
+    <div class="container" style="width: 100%">
+        <div class="row">
+            <div class="col" style="align-items: center;">
+            <h2>How does Happiness Score Change over Time?</h2>
+            <p>Even if you live in some of the unhappiest countries - it does not mean that the country's happiness score will not change over time. Same goes for the happiest countries in the world. Go ahead and explore countries' happiness score trends by selecting different regions. <br><br><b>Can you spot all the countries that experienced a significant change in Happiness Score (change of greater than 1)?</b> </p>
+            <i>Countries with significant happiness score changes will be highlighted for you.</i>
+             </div>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col" style="align-items: center;">
+                <label style="text-transform: uppercase;">Select Region: &nbsp; &nbsp;</label>
+                <select id='regionSelector' class="custom-select align-self-center" style="width: 20%" onchange="regionChange()">
+                    <option value="Western Europe" selected>Western Europe</option>
+                    <option value="Central and Eastern Europe">Central and Eastern Europe</option>
+                    <option value="North America">North America</option>
+                    <option value="Latin America and Caribbean" >Latin America and Caribbean</option>
+                    <option value="Australia and New Zealand">Australia and New Zealand</option>
+                    <option value="Southeastern Asia">Southeastern Asia</option>
+                    <option value="Southern Asia">Southern Asia</option>
+                    <option value="Eastern Asia">Eastern Asia</option>
+                    <option value="Sub-Saharan Africa">Sub-Saharan Africa</option>
+                </select>
+                <div id="happinesstrendDiv"></div>
+            </div>
+        </div> 
+    </div>
+</section>
+
+   <!--SECTION #7: SCATTER CHART SECTION-->
+  <section class="vertical-scrolling" style="background-image: linear-gradient(165deg,rgba(255,174,0,.2) 25%,rgba(0,105,144,.2) 95%);">
+      <div class="container" style="width: 100%">
+        <div class="row">
+            <div class="col-12">
+                <br>
+                <br>
+                <br>
+                <h2>Factors Contributing to Country's Happiness</h2>
+                <p>To explore this visually, select each year using the slider below and each of the six factors from the dropdown menu. Each bubble represents a country and its size represents its relative population. The colors of the bubbles correspond to different geographical regions.<br><br> <strong>Can you notice any patterns or correlations?</strong></strong></p>
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12" style="margin-top: auto; margin-bottom: auto; text-align: center;">
+                <input type="range" min="2015" max="2020" value="2020" id="yearSlider" 
+                    step="1" list="years" onchange="yearChange3()">
+                <datalist id="years">
+                    <option>2015</option>
+                    <option>2016</option>
+                    <option>2017</option>
+                    <option>2018</option>
+                    <option>2019</option>
+                    <option>2020</option>
+                </datalist>
+                <svg role="presentation" width="100%" height="10" xmlns="http://www.w3.org/2000/svg">
+                    <rect class="range__tick" x="0%" y="3" width="1" height="10"></rect>
+                    <rect class="range__tick" x="20%" y="3" width="1" height="10"></rect>
+                    <rect class="range__tick" x="40%" y="3" width="1" height="10"></rect>
+                    <rect class="range__tick" x="60%" y="3" width="1" height="10"></rect>
+                    <rect class="range__tick" x="80%" y="3" width="1" height="10"></rect>
+                    <rect class="range__tick" x="99%" y="3" width="1" height="10"></rect>
+                    </svg>
+                    <svg role="presentation" width="100%" height="14" xmlns="http://www.w3.org/2000/svg">
+                    <text class="range__point" x="0%" y="14" text-anchor="start">2015</text>
+                    <text class="range__point" x="20%" y="14" text-anchor="middle">2016</text>
+                    <text class="range__point" x="40%" y="14" text-anchor="middle">2017</text>
+                    <text class="range__point" x="60%" y="14" text-anchor="middle">2018</text>
+                    <text class="range__point" x="80%" y="14" text-anchor="middle">2019</text>
+                    <text class="range__point" x="98%" y="14" text-anchor="middle">2020</text>
+                    </svg>
+                    </fieldset>
+                <br>
+                <br>
+                <label style="text-transform: uppercase;">Select Category to Compare Against Happiness Score: &nbsp; &nbsp;</label>
+                <select id='scoreSelector' class="custom-select align-self-center" style="width: 20%" onchange="scoreChange()">
+                    <option value="ECONOMY_SCORE">Economy Score</option>
+                    <option value="SOCIAL_SCORE">Social Score</option>
+                    <option value="HEALTH_SCORE">Life Expectancy Score</option>
+                    <option value="FREEDOM_SCORE" selected>Freedom Score</option>
+                    <option value="CORRUPTION_SCORE">Absence of Corruption Score</option>
+                    <option value="GENEROSITY_SCORE">Generosity Score</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div id="scatterDiv"></div>
+            </div>	
+        </div>
+        <div class="row">
+            <div class="col" style="margin-top: auto; margin-bottom: auto; text-align: left;">  
+                    <svg height="30" width="500">
+                        <circle cx="70" cy="15" r="15" stroke="gray"  fill="lightgray" />
+                        <circle cx="105" cy="15" r="10" stroke="gray" fill="lightgray" />
+                        <circle cx="130" cy="15" r="7" stroke="gray" fill="lightgray" />
+                        <text x="150", y="20">Population (Larger circles mean higher population)</text>
+                    </svg>
+            </div>
+            
+        </div>
+      </div>
+  </section>
+
+
+   <!--SECTION #8 - RADAR MAP SECTION-->
+   <section class="vertical-scrolling" style="background-image: linear-gradient(165deg,rgba(255,174,0,.2) 25%,rgba(0,105,144,.2) 95%);">
+    <div class="container" style="width: 100%;vertical-align: middle" >
+        <div class="row" style="height:100px"></div>
+        <div class="row" style="justify-content: center;height:100px"><h2>So, do high ranking countries score better in all measures?</h2></div>
+        <div class="row">
+            <div class="col">
+                <label style="text-transform: uppercase;">Select Year: &nbsp; &nbsp;</label>
+                <select id='yearSelectorRadar' class="custom-select align-self-center" style="width: 20%" onchange="yearChangeRadar()">
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018" >2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020" selected>2020</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8" id="radar" style="align-items: center;">
+                <div id="radarDiv"></div>
+            </div>
+            <div class="col-4">
+                <div id="carouselRadar" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <p>Take a look at how the highest<br/> and lowest ranked countries<br/>every year scored<br/>in each measure.<br/><br/>
+                                Compare the average scores to the highest and lowest ranked countries: are the score disparities proportional for every score type?
+                            </p>
+                        </div>
+                        <div class="carousel-item">
+                            <p>We see that in most years,<br/>the lowest ranked country has a<br/>disproportionately lower<br/>Freedom and Economy score than the average. </p>
+                        </div>
+                        <div class="carousel-item">
+                            <p>However, we also see that the<br/>happiest country isn't always performing exceedingly well<br/>in all aspects.</p>
+                            <p>For example, the top ranking<br/>countries often score as<br/>much as the lowest ranking countries for the Generosity score.</p>
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselRadar" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselRadar" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+
+
+  <!--SECTION #9 - BUBBLE MAP SECTION-->
+  <section class="vertical-scrolling" style="background-image: linear-gradient(165deg,rgba(255,174,0,.2) 25%,rgba(0,105,144,.2) 95%);">
+    
+    <div class="container" style="width: 100%">
+        <div class="row" style="align-items: center;">
+            <div class="col" style="align-items: center;">
+                <div>
+                    <h2>What do the happiest countries in the world have in common?</h2>
+                    <i>Click on the country bubble to easily track its scores across categories.</i>		
+                </div>
+            </div>
+            <div class="col" style="align-items: center;">
+                <strong><p id="p0" class="pTitle Side">Economy</p></strong>
+                <p id="p1" class="Side">The economy score measures the extent to which a country's GDP contributes to calculating the Happiness Score.</p>
+                <p id="p2" class="Side">We can observe that the happiest countries in the world, like Luxemburg, Singapore, and Norway, have the highest GDP per capita--resulting in a higher Economy score. We can see that there appears to be a strong correlation between Economy and Happiness scores. Therefore, having a healthy economy leads to happier lives.</p>
+            </div>	
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col" style="align-items: center;">
+                <div id="buttons"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col" style="align-items: center;">
+                <div id="bubbleDiv"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col" style="margin-top: auto; margin-bottom: auto; text-align: left;">  
+                    <svg height="30" width="500">
+                        <circle cx="70" cy="15" r="15" stroke="gray"  fill="lightgray" />
+                        <circle cx="105" cy="15" r="10" stroke="gray" fill="lightgray" />
+                        <circle cx="130" cy="15" r="7" stroke="gray" fill="lightgray" />
+                        <text x="150", y="20">Population (Larger circles mean higher population)</text>
+                    </svg>
+                    <svg height="30" width="500">
+                        <circle cx="65" cy="15" r="8" stroke="black" stroke-width="0.5" fill="#d95f0e"/>
+                        <circle cx="95" cy="15" r="8" stroke="black" stroke-width="0.5" fill="#fec44f" />
+                        <circle cx="125" cy="15" r="8" stroke="black" stroke-width="0.5" fill="#fff7bc"/>
+                        <text x="150", y="20">Happiness Score (Darker color means higher happinness score)</text>
+                    </svg>
+            </div>
+            
+        </div>
+        
+    </div>
+  </section>
+
+  <!--SECTION #10 CONCLUSION-->
+  <section class="vertical-scrolling" >
+    <div class="container" style="width: 100%">
+        <div class="col" style="align-items: center;">
+            <div>
+                <p>After exploring the visualizations, you should have noticed clear unsurprising patterns that the happiest countries in the world score consistently high in the Freedom, Social, Economy, Health, and Generosity categories. However, even the world's happiest countries did not score exceptionally well in the Government Corruption category. Governments should be worried that the 'absence of corruption' had abysmal scores across the globe. Citizens need to believe that the government has their best interests at heart. The lowest-scoring countries in the Happiness Rankings all share disproportionately low Freedom, Economy, and Health scores, and the government of these countries needs to continue investing in these areas to help increase the happiness of its population. <br><br>However, as we have seen, if governments around the world invest in improving the factors that lead to happiness, overall happiness can see significant improvements over relatively short periods of time.
+                </p>
+                <br>
+                <br>
+                <h2>What can you do to stay happy?</h2>
+                <!--<img src="img/5-ways-to-stay-happy.png" alt="five smileys">-->
+                <i>Regardless of what country you live in, your happiness is still at least 40% up to you. Click each of the circles to learn about five ways to be happier, according to the Mayo Clinic.</i>
+                <br><br>
+                    <div id="educationDiv" style="align-items: center"></div>
+                    <b><p id="title_span"></p></b>
+                    <p id="content_span"></p>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+  <!--SECTION #11: QUOTE-->
+    <section class="vertical-scrolling" style="background-image: linear-gradient(180deg, #52ACFF 25%, #FFE32C 100%);">
+        <div class="blockquote-wrapper">
+            <div class="blockquote">
+                    There is no path to Happiness. Happiness is the path.<br>
+                <span style="color: darkblue">&mdash;BUDDHA&mdash;</span>
+            </div>
+        </div>
+    </section>
+
+    <!--SECTION #12: SURVEY-->
+    <section class="vertical-scrolling" style="background-image: linear-gradient(165deg,rgba(255,174,0,.2) 25%,rgba(0,105,144,.2) 95%);">
+        <div class="container">
+            <div class="row">
+                <div class="col-8">
+                    <h2>What does happiness mean to you?</h2>
+                    <p>Please submit your response here, and will be added to the collective knowledge of happiness.</p>
+                    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSc8xInggxQouU1d1GI1inUY3hmfKAnnjEK2rTnmnkixzksM6Q/viewform?embedded=true" width="600" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>           
+                </div>
+                <div class="col-4" style="align-content: center;">
+                    <div id="wordCloudDiv"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--SECTION #13: REFERENCES-->
+    <section class="vertical-scrolling" style="background-image: linear-gradient(165deg,rgba(255,174,0,.2) 25%,rgba(0,105,144,.2) 95%);">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2>References</h2>
+                    <ul style="font-size: 20px">
+                        <li><a style="color: gray" href="https://worldhappiness.report/ed/2020/"  target="_blank">World Happiness Report 2020</a></li>
+                        <li><a style="color: gray" href="https://www.imdb.com/title/tt1613092/" target="_blank">Happy! movie </a></li>
+                        <li><a style="color: gray" href="https://www.mayoclinic.org/healthy-lifestyle/stress-management/in-depth/how-to-be-happy/art-20045714/" target="_blank">Mayo Clinic: How to be happy: Tips for cultivating contentment</a></li>
+                        <li><a style="color: gray" href="https://link.springer.com/article/10.1007/s11482-019-09802-4"  target="_blank">The Relations between Hope and Subjective Well-Being: a Literature Overview and Empirical Analysis</a></li>
+                        <li><a style="color: gray" href="https://www.kaggle.com/unsdsn/world-happiness" target="_blank"> World Happiness Report datasource</a></li>
+                        <li><a style="color: gray" href="https://worldpopulationreview.com/country-rankings/happiest-countries-in-the-world" target="_blank"> World Population Review</a></li>
+                        <li><a style="color: gray" href="https://hopefulminds.org/" target="_blank">Hopeful Minds</a></li>
+                        <li><a style="color: gray" href="https://www.visualcapitalist.com/visualizing-the-happiest-country-on-every-continent/" target="_blank">Visualizing the Happiest Country on Every Continent</a> </li>
+                        <li><a style="color: gray" href="https://medium.com/@sieunpark77/visualizing-the-2019-world-happiness-report-with-folium-a949463ae446" target="_blank"> Visualizing the 2019 World Happiness with Folium</a></li>
+                    </ul>
+                    <br>
+                    <p>This data visualization is brought to you by Andrey Esipov, Gabin Ryu, and <a href="https://www.linkedin.com/in/anyazinoveva/" target="_blank" style="color: black;">Anya Zinoveva</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
+<!-- Load JS libraries -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.6.6/jquery.fullPage.min.js'></script>
+
+<!-- d3 -->
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://d3js.org/topojson.v2.min.js"></script>
+<script src="https://d3js.org/d3-geo.v1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
+
+<!-- Visualization objects -->
+<script src="js/mapVis.js"></script>
+<script src="js/trendVis.js"></script>
+<script src="js/stackedBarVis.js"></script>
+<script src="js/bubbleVis.js"></script>
+<script src="js/scatterVis.js"></script>
+<script src="js/radialMapVis.js"></script>
+<script src="js/radarVis.js"></script>
+<script src="js/wordcloud.js"></script>
+<script src="js/myvis.js"></script>
+<script src="js/educationVis.js"></script>
+<script src="js/main.js"></script>
+<script src="js/function.js"></script>
+
+</body>
+</html>
