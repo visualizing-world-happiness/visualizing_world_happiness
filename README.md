@@ -1,13 +1,13 @@
 # Visualizing World Happiness
 ### CS171 Project by Andrey Esipov, Gabin Ryu, Anna Zinoveva
 ​
-Project website: https://andrey-esipov.github.io/visualizing_world_happiness/
+Project website: https://andrey-esipov.github.io/visualizing_world_happiness/ \n
 ​
-Screencast video: [URL HERE](URL HERE)
+Screencast video: [URL HERE](URL HERE) /n
 ​
-The folder contains the code for our project website. We have used the following libraries in our code...
+The folder contains the code for our project website. We have used the following libraries in our code... \n
 ​
-Additional JS libraries:
+Additional JS libraries: /n
 ​
 * [jQuery](https://jquery.com/)
 * [Bootstrap](https://getbootstrap.com/)
